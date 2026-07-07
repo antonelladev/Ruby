@@ -1,0 +1,139 @@
+/* =========================================================================
+   REDFLIX — Responsive
+   ========================================================================= */
+
+@media (max-width: 1024px) {
+  .card {
+    width: 156px;
+  }
+
+  .hero {
+    height: 82vh;
+  }
+}
+
+@media (max-width: 860px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .navbar-inner {
+    gap: 16px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-description {
+    max-width: 46ch;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --nav-height: 60px;
+  }
+
+  .brand-mark {
+    font-size: 19px;
+  }
+
+  .search-input {
+    width: 0;
+  }
+
+  .search-form--open .search-input {
+    width: 150px;
+  }
+
+  .hero {
+    height: 76vh;
+    min-height: 480px;
+  }
+
+  .hero-title {
+    font-size: clamp(32px, 10vw, 46px);
+  }
+
+  .hero-description {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .hero-actions {
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .rows {
+    margin-top: -40px;
+  }
+
+  .card {
+    width: 132px;
+  }
+
+  .row-title {
+    font-size: 18px;
+  }
+
+  .row-nav {
+    display: none;
+  }
+
+  .hover-card {
+    width: 260px;
+  }
+}
+
+@media (max-width: 400px) {
+  .card {
+    width: 118px;
+  }
+
+  .poster-initial {
+    font-size: 38px;
+  }
+}
+
+/* ---- Detail page ------------------------------------------------------- */
+
+@media (min-width: 640px) {
+  .movie-poster-frame {
+    display: block;
+  }
+}
+
+@media (max-width: 860px) {
+  .movie-details-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .movie-banner {
+    min-height: 52vh;
+  }
+
+  .movie-banner-content {
+    gap: 20px;
+  }
+
+  .movie-poster-frame {
+    width: 130px;
+  }
+
+  .movie-details {
+    padding-top: 32px;
+  }
+
+  .factsheet-row {
+    grid-template-columns: 84px 1fr;
+  }
+}
