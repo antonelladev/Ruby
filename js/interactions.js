@@ -1,5 +1,5 @@
 /**
- * REDFLIX — Interaction Layer
+ * RUBY — Interaction Layer
  * -----------------------------------------------------------------------
  * Wires up behavior on top of the markup Render produced. One shared
  * hover-card node is reused for every poster (rather than one per card)

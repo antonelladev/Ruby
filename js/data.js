@@ -1,12 +1,12 @@
 /**
- * REDFLIX — Data Layer
+ * RUBY — Data Layer
  * -----------------------------------------------------------------------
  * All catalog content lives here, decoupled from rendering. This lets
  * every page (home, detail) reuse the same source of truth without
  * touching DOM logic.
  *
  * Every title carries:
- *  - `spine`   REDFLIX's own catalog index, in the spirit of a numbered
+ *  - `spine`   RUBY's own catalog index, in the spirit of a numbered
  *                film collection. Shown in the UI, never changes.
  *  - `id`       Short numeric slug used in URLs (pelicula.html?id=001).
  *                Internal only — never shown to the person.
@@ -17,10 +17,10 @@
  * `synopsis` is the longer version shown on the detail page.
  */
 
-const REDFLIX_CATALOG = {
+const RUBY_CATALOG = {
   featured: {
     id: "001",
-    spine: "RX–001",
+    spine: "RB–001",
     title: "Vestigio",
     year: 2024,
     duration: "2h 11m",
@@ -43,7 +43,7 @@ const REDFLIX_CATALOG = {
       titles: [
         {
           id: "002",
-          spine: "RX–014",
+          spine: "RB–014",
           title: "Umbral",
           year: 2023,
           duration: "1h 58m",
@@ -59,7 +59,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "003",
-          spine: "RX–022",
+          spine: "RB–022",
           title: "Última Función",
           year: 2022,
           duration: "2h 04m",
@@ -75,7 +75,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "004",
-          spine: "RX–031",
+          spine: "RB–031",
           title: "Contraluz",
           year: 2024,
           duration: "1h 47m",
@@ -91,7 +91,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "005",
-          spine: "RX–007",
+          spine: "RB–007",
           title: "El Silencio de Marzo",
           year: 2021,
           duration: "2h 19m",
@@ -107,7 +107,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "006",
-          spine: "RX–045",
+          spine: "RB–045",
           title: "Punto Ciego",
           year: 2023,
           duration: "1h 52m",
@@ -123,7 +123,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "007",
-          spine: "RX–019",
+          spine: "RB–019",
           title: "Marea Alta",
           year: 2020,
           duration: "1h 41m",
@@ -139,7 +139,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "008",
-          spine: "RX–052",
+          spine: "RB–052",
           title: "Código Ausente",
           year: 2024,
           duration: "2h 08m",
@@ -155,7 +155,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "009",
-          spine: "RX–011",
+          spine: "RB–011",
           title: "Los Herederos",
           year: 2019,
           duration: "2h 26m",
@@ -177,7 +177,7 @@ const REDFLIX_CATALOG = {
       titles: [
         {
           id: "010",
-          spine: "RX–063",
+          spine: "RB–063",
           title: "Perímetro",
           year: 2023,
           duration: "1h 55m",
@@ -193,7 +193,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "011",
-          spine: "RX–028",
+          spine: "RB–028",
           title: "Ronda Nocturna",
           year: 2022,
           duration: "1h 49m",
@@ -209,7 +209,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "012",
-          spine: "RX–071",
+          spine: "RB–071",
           title: "Frontera Sur",
           year: 2024,
           duration: "2h 02m",
@@ -225,7 +225,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "013",
-          spine: "RX–039",
+          spine: "RB–039",
           title: "Contraataque",
           year: 2021,
           duration: "1h 44m",
@@ -241,7 +241,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "014",
-          spine: "RX–056",
+          spine: "RB–056",
           title: "Zona Cero",
           year: 2020,
           duration: "2h 15m",
@@ -257,7 +257,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "015",
-          spine: "RX–084",
+          spine: "RB–084",
           title: "Punto de Fuga",
           year: 2023,
           duration: "1h 51m",
@@ -273,7 +273,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "016",
-          spine: "RX–018",
+          spine: "RB–018",
           title: "Al Filo",
           year: 2019,
           duration: "1h 58m",
@@ -295,7 +295,7 @@ const REDFLIX_CATALOG = {
       titles: [
         {
           id: "017",
-          spine: "RX–009",
+          spine: "RB–009",
           title: "Sala de Espera",
           year: 2022,
           duration: "1h 39m",
@@ -311,7 +311,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "018",
-          spine: "RX–033",
+          spine: "RB–033",
           title: "El Peso del Agua",
           year: 2021,
           duration: "2h 12m",
@@ -327,7 +327,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "019",
-          spine: "RX–047",
+          spine: "RB–047",
           title: "Cartas que no Llegaron",
           year: 2020,
           duration: "1h 56m",
@@ -343,7 +343,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "020",
-          spine: "RX–061",
+          spine: "RB–061",
           title: "Otoño Interior",
           year: 2023,
           duration: "2h 05m",
@@ -359,7 +359,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "021",
-          spine: "RX–025",
+          spine: "RB–025",
           title: "Las Horas Quietas",
           year: 2018,
           duration: "1h 48m",
@@ -375,7 +375,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "022",
-          spine: "RX–073",
+          spine: "RB–073",
           title: "Suelo Firme",
           year: 2024,
           duration: "2h 01m",
@@ -397,7 +397,7 @@ const REDFLIX_CATALOG = {
       titles: [
         {
           id: "023",
-          spine: "RX–088",
+          spine: "RB–088",
           title: "Segunda Órbita",
           year: 2024,
           duration: "2h 09m",
@@ -413,7 +413,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "024",
-          spine: "RX–016",
+          spine: "RB–016",
           title: "Materia Oscura",
           year: 2022,
           duration: "1h 57m",
@@ -429,7 +429,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "025",
-          spine: "RX–042",
+          spine: "RB–042",
           title: "El Último Jardín",
           year: 2021,
           duration: "2h 14m",
@@ -445,7 +445,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "026",
-          spine: "RX–067",
+          spine: "RB–067",
           title: "Réplica",
           year: 2023,
           duration: "1h 46m",
@@ -461,7 +461,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "027",
-          spine: "RX–050",
+          spine: "RB–050",
           title: "Horizonte Cero",
           year: 2020,
           duration: "2h 03m",
@@ -483,7 +483,7 @@ const REDFLIX_CATALOG = {
       titles: [
         {
           id: "028",
-          spine: "RX–005",
+          spine: "RB–005",
           title: "Doble Turno",
           year: 2023,
           duration: "1h 43m",
@@ -499,7 +499,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "029",
-          spine: "RX–037",
+          spine: "RB–037",
           title: "El Inquilino",
           year: 2022,
           duration: "1h 51m",
@@ -515,7 +515,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "030",
-          spine: "RX–059",
+          spine: "RB–059",
           title: "Cadena de Frío",
           year: 2021,
           duration: "1h 58m",
@@ -531,7 +531,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "031",
-          spine: "RX–081",
+          spine: "RB–081",
           title: "Sin Testigos",
           year: 2024,
           duration: "1h 49m",
@@ -547,7 +547,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "032",
-          spine: "RX–024",
+          spine: "RB–024",
           title: "Vecino de Piso",
           year: 2019,
           duration: "1h 55m",
@@ -569,7 +569,7 @@ const REDFLIX_CATALOG = {
       titles: [
         {
           id: "033",
-          spine: "RX–003",
+          spine: "RB–003",
           title: "La Fábrica de Sal",
           year: 2022,
           duration: "1h 22m",
@@ -585,7 +585,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "034",
-          spine: "RX–029",
+          spine: "RB–029",
           title: "Voces del Archivo",
           year: 2021,
           duration: "1h 34m",
@@ -601,7 +601,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "035",
-          spine: "RX–054",
+          spine: "RB–054",
           title: "El Otro Lado del Mapa",
           year: 2023,
           duration: "1h 28m",
@@ -617,7 +617,7 @@ const REDFLIX_CATALOG = {
         },
         {
           id: "036",
-          spine: "RX–076",
+          spine: "RB–076",
           title: "Manos de Taller",
           year: 2020,
           duration: "1h 19m",
@@ -640,19 +640,19 @@ const REDFLIX_CATALOG = {
  * Flat lookup used by the detail page (pelicula.html) to find a title by
  * id without the caller needing to know which category it lives in.
  */
-const REDFLIX_ALL_TITLES = [
-  REDFLIX_CATALOG.featured,
-  ...REDFLIX_CATALOG.categories.flatMap((c) =>
+const RUBY_ALL_TITLES = [
+  RUBY_CATALOG.featured,
+  ...RUBY_CATALOG.categories.flatMap((c) =>
     c.titles.map((t) => ({ ...t, categoryId: c.id, categoryLabel: c.label }))
   ),
 ];
 
 function findTitleById(id) {
-  return REDFLIX_ALL_TITLES.find((t) => t.id === id) || null;
+  return RUBY_ALL_TITLES.find((t) => t.id === id) || null;
 }
 
 function findSimilarTitles(target, limit = 8) {
-  return REDFLIX_ALL_TITLES.filter(
+  return RUBY_ALL_TITLES.filter(
     (t) =>
       t.id !== target.id && t.genres.some((g) => target.genres.includes(g))
   ).slice(0, limit);
@@ -660,12 +660,12 @@ function findSimilarTitles(target, limit = 8) {
 
 function findMoreLikeThis(target, exclude = [], limit = 8) {
   const excludeIds = new Set([target.id, ...exclude.map((t) => t.id)]);
-  const sameCategory = REDFLIX_ALL_TITLES.filter(
+  const sameCategory = RUBY_ALL_TITLES.filter(
     (t) => !excludeIds.has(t.id) && t.categoryId === target.categoryId
   );
   if (sameCategory.length >= limit) return sameCategory.slice(0, limit);
 
-  const fallback = REDFLIX_ALL_TITLES.filter(
+  const fallback = RUBY_ALL_TITLES.filter(
     (t) => !excludeIds.has(t.id) && !sameCategory.includes(t)
   );
   return [...sameCategory, ...fallback].slice(0, limit);

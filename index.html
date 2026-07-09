@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>REDFLIX — Cine sin distracciones</title>
-  <meta name="description" content="REDFLIX: una selección curada de cine y series, sin ruido." />
+  <title>RUBY — Cine sin distracciones</title>
+  <meta name="description" content="RUBY: una selección curada de cine y series, sin ruido." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,8 +13,7 @@
     rel="stylesheet"
   />
 
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
@@ -22,8 +21,8 @@
   <!-- ==================== NAVBAR ==================== -->
   <header class="navbar">
     <div class="navbar-inner">
-      <a href="#" class="brand" aria-label="REDFLIX, ir al inicio">
-        <span class="brand-mark">RED<span>FLIX</span></span>
+      <a href="#" class="brand" aria-label="RUBY, ir al inicio">
+        <span class="brand-mark">RUB<span>Y</span></span>
       </a>
 
       <nav class="nav-menu" aria-label="Navegación principal">
@@ -41,7 +40,7 @@
             class="search-input"
             data-search-input
             placeholder="Buscar títulos, géneros…"
-            aria-label="Buscar en REDFLIX"
+            aria-label="Buscar en RUBY"
           />
           <button
             type="button"
@@ -125,6 +124,21 @@
   <script src="js/data.js"></script>
   <script src="js/render.js"></script>
   <script src="js/interactions.js"></script>
-  <script src="js/main.js"></script>
+  <script>
+    // Home-page bootstrap: read data, render it, wire interactions.
+    // Kept inline since it's a handful of lines specific to this page —
+    // see js/detail.js for the equivalent (larger) controller used by
+    // pelicula.html.
+    document.addEventListener("DOMContentLoaded", () => {
+      const rowsMount = document.querySelector("[data-rows-mount]");
+
+      Render.renderHero(RUBY_CATALOG.featured);
+      if (rowsMount) {
+        Render.renderCategories(RUBY_CATALOG.categories, rowsMount);
+      }
+
+      Interactions.init();
+    });
+  </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /**
- * REDFLIX — Render Layer
+ * RUBY — Render Layer
  * -----------------------------------------------------------------------
  * Pure(ish) DOM construction. Nothing in here attaches event listeners —
  * that responsibility belongs to interactions.js. Keeping the split lets
@@ -78,6 +78,7 @@ const Render = (() => {
     card.href = `pelicula.html?id=${title.id}`;
     card.dataset.spine = title.spine;
     card.dataset.category = categoryId;
+    card.dataset.id = title.id;
 
     const poster = document.createElement("div");
     poster.className = `poster poster--tone-${title.tone}`;

@@ -1,8 +1,8 @@
 /**
- * REDFLIX — Detail Page Controller
+ * RUBY — Detail Page Controller
  * -----------------------------------------------------------------------
  * pelicula.html is a single template. This script reads the `id` query
- * param, looks it up in REDFLIX_ALL_TITLES (js/data.js), and fills in
+ * param, looks it up in RUBY_ALL_TITLES (js/data.js), and fills in
  * the DOM. If the id doesn't resolve to a title, it shows the 404 state
  * instead of a broken page.
  */
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  document.title = `${title.title} (${title.year}) — REDFLIX`;
+  document.title = `${title.title} (${title.year}) — RUBY`;
   renderDetail(title);
   renderRelated(title);
   Interactions.init();
@@ -108,7 +108,7 @@ function initShare(title) {
     const url = window.location.href;
     if (navigator.share) {
       try {
-        await navigator.share({ title: `${title.title} — REDFLIX`, url });
+        await navigator.share({ title: `${title.title} — RUBY`, url });
       } catch (err) {
         // User cancelled the native share sheet — no action needed.
       }
