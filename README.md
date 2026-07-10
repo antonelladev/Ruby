@@ -32,32 +32,6 @@ RUBY is a frontend-focused project designed to showcase modern UI design, scalab
 
 ---
 
-## Project Structure
-
-```
-ruby/
-│
-├── assets/
-│   ├── banners/
-│   ├── logo/
-│   └── posters/
-│
-├── css/
-│
-├── js/
-│   ├── movies.js
-│   ├── render.js
-│   ├── detail.js
-│   ├── interactions.js
-│   └── ...
-│
-├── index.html
-├── pelicula.html
-└── README.md
-```
-
----
-
 ## Technologies
 
 - HTML5
@@ -149,6 +123,6 @@ This project was created to demonstrate:
 
 ## License
 
-This project was created for educational and portfolio purposes.
+This project was created for educational and portfolio purposes. 
 
 Movie titles belong to their respective owners.
