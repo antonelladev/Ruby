@@ -3,9 +3,11 @@
  * -----------------------------------------------------------------------
  * This is the ONLY place movie content lives. To add a new title:
  *
- *   1. Drop its poster in  assets/posters/<id>.jpg   (2:3, e.g. 600×900)
- *   2. Drop its banner in  assets/banners/<id>.jpg    (wide, e.g. 1920×1080)
+ *   1. Drop its poster in  assets/posters/<slug>.jpg   (2:3, e.g. 600×900)
+ *   2. Drop its banner in  assets/banners/<slug>.jpg    (wide, e.g. 1920×1080)
  *      — banner is only required if `featured: true`
+ *      — <slug> is the title in lowercase, spaces replaced with hyphens
+ *        (e.g. "Blade Runner 2049" → blade-runner-2049.jpg)
  *   3. Add a new object to RUBY_MOVIES below.
  *
  * Nothing else needs to change. The Home page, category rows, the hero
@@ -51,8 +53,8 @@ const RUBY_MOVIES = [
       "Un antiguo piloto de la NASA se convierte en la última esperanza de la humanidad al cruzar un agujero de gusano en busca de un nuevo hogar entre las estrellas.",
     descripcion:
       "Cuando la Tierra deja de poder sostener a la humanidad, un grupo de exploradores se embarca en la misión espacial más importante de la historia: cruzar un agujero de gusano cercano a Saturno para hallar un planeta habitable. Entre ellos viaja un antiguo piloto que debió elegir entre quedarse junto a sus hijos o intentar salvar a la especie entera, sabiendo que el tiempo transcurre de forma distinta más allá de la Tierra. Una travesía que mezcla física teórica con una historia profundamente humana sobre el amor y la distancia.",
-    poster: "assets/posters/001.jpg",
-    banner: "assets/banners/001.jpg",
+    poster: "assets/posters/interstellar.jpg",
+    banner: "assets/banners/interstellar.jpg",
     tono: "slate",
     categoria: "scifi",
     featured: true,
@@ -74,8 +76,8 @@ const RUBY_MOVIES = [
       "Un ladrón especializado en robar secretos desde el subconsciente recibe el encargo inverso: plantar una idea en la mente de un heredero corporativo.",
     descripcion:
       "Dom Cobb domina el arte de infiltrarse en los sueños ajenos para extraer información valiosa. Cuando un cliente le ofrece la posibilidad de recuperar su antigua vida a cambio de un trabajo imposible —sembrar, en lugar de robar, una idea en la mente de otra persona— Cobb reúne a un equipo capaz de construir sueños dentro de sueños. A medida que las capas se multiplican, los límites entre lo real y lo soñado empiezan a desdibujarse.",
-    poster: "assets/posters/002.jpg",
-    banner: "assets/banners/002.jpg",
+    poster: "assets/posters/inception.jpg",
+    banner: "assets/banners/inception.jpg",
     tono: "teal",
     categoria: "scifi",
     featured: false,
@@ -97,8 +99,8 @@ const RUBY_MOVIES = [
       "Batman se enfrenta a un criminal anarquista que quiere demostrar que cualquier persona, sin importar cuán íntegra, puede caer en el caos.",
     descripcion:
       "Gotham empieza a recuperar el control gracias al trabajo conjunto de Batman, el comisionado Gordon y el fiscal Harvey Dent. Pero la llegada de un enigmático criminal sin motivaciones económicas ni ideológicas —solo el deseo de sembrar el caos— pone a prueba los límites morales de cada uno de ellos. Una guerra silenciosa por el alma de la ciudad, donde ganar puede costar mucho más que perder.",
-    poster: "assets/posters/003.jpg",
-    banner: "assets/banners/003.jpg",
+    poster: "assets/posters/the-dark-knight.jpg",
+    banner: "assets/banners/the-dark-knight.jpg",
     tono: "crimson",
     categoria: "accion",
     featured: true,
@@ -120,8 +122,8 @@ const RUBY_MOVIES = [
       "La historia del físico que lideró el desarrollo de la bomba atómica y tuvo que vivir con las consecuencias de su propia creación.",
     descripcion:
       "J. Robert Oppenheimer reúne a los científicos más brillantes de su generación para desarrollar, en tiempo récord, el arma más destructiva jamás construida. El relato recorre desde sus años de formación hasta las audiencias que, años después de Hiroshima y Nagasaki, pusieron en duda su lealtad y su legado. Un retrato sobre la ambición intelectual y el peso moral de cambiar el curso de la historia.",
-    poster: "assets/posters/004.jpg",
-    banner: "assets/banners/004.jpg",
+    poster: "assets/posters/oppenheimer.jpg",
+    banner: "assets/banners/oppenheimer.jpg",
     tono: "amber",
     categoria: "drama",
     featured: true,
@@ -143,8 +145,8 @@ const RUBY_MOVIES = [
       "En su segundo año como vigilante, Batman investiga una serie de asesinatos que exponen la corrupción oculta bajo Gotham.",
     descripcion:
       "Un asesino enmascarado empieza a atacar a figuras públicas de Gotham, dejando en cada escena del crimen acertijos dirigidos directamente a Batman. Mientras investiga junto a la detective Selina Kyle, Bruce Wayne descubre que la corrupción de la ciudad llega mucho más lejos de lo que imaginaba, e incluso alcanza a su propia familia. Una versión más sombría y detectivesca del personaje, construida como un thriller criminal.",
-    poster: "assets/posters/005.jpg",
-    banner: "assets/banners/005.jpg",
+    poster: "assets/posters/the-batman.jpg",
+    banner: "assets/banners/the-batman.jpg",
     tono: "moss",
     categoria: "accion",
     featured: false,
@@ -166,8 +168,8 @@ const RUBY_MOVIES = [
       "Un comediante fallido y aislado por la sociedad de Gotham inicia una espiral que lo transformará en un ícono del caos.",
     descripcion:
       "Arthur Fleck sueña con ser comediante mientras cuida de su madre enferma y sobrevive a base de trabajos precarios en una ciudad que lo ignora o lo humilla. A medida que las instituciones que lo sostenían —salud mental, trabajo, familia— colapsan una tras otra, Arthur comienza a transformarse en algo distinto. Un estudio de personaje íntimo y perturbador sobre el aislamiento y la violencia que puede generar una sociedad indiferente.",
-    poster: "assets/posters/006.jpg",
-    banner: "assets/banners/006.jpg",
+    poster: "assets/posters/joker.jpg",
+    banner: "assets/banners/joker.jpg",
     tono: "crimson",
     categoria: "thriller",
     featured: false,
@@ -189,8 +191,8 @@ const RUBY_MOVIES = [
       "Un programador descubre que la realidad que conoce es una simulación diseñada para mantener a la humanidad esclavizada.",
     descripcion:
       "Thomas Anderson lleva una doble vida: programador de día, hacker conocido como Neo por las noches. Cuando un grupo liderado por Morpheus le revela que el mundo que percibe es una simulación generada por máquinas, Neo debe decidir si quiere conocer la verdad, sin importar cuán devastadora sea. Una travesía sobre el libre albedrío que redefinió el cine de acción de su época.",
-    poster: "assets/posters/007.jpg",
-    banner: "assets/banners/007.jpg",
+    poster: "assets/posters/the-matrix.jpg",
+    banner: "assets/banners/the-matrix.jpg",
     tono: "moss",
     categoria: "scifi",
     featured: false,
@@ -212,8 +214,8 @@ const RUBY_MOVIES = [
       "Un oficinista insomne y un vendedor de jabón carismático fundan un club de peleas clandestino que se les escapa de las manos.",
     descripcion:
       "Atrapado en una vida de consumo, insomnio y vacío, un empleado de oficina conoce a Tyler Durden, un hombre magnético que vive completamente al margen de las reglas. Juntos fundan un club de peleas clandestino que rápidamente se convierte en un movimiento con reglas propias y una lógica cada vez más peligrosa. Una crítica ácida y perturbadora al vacío existencial de la vida moderna.",
-    poster: "assets/posters/008.jpg",
-    banner: "assets/banners/008.jpg",
+    poster: "assets/posters/fight-club.jpg",
+    banner: "assets/banners/fight-club.jpg",
     tono: "slate",
     categoria: "thriller",
     featured: false,
@@ -235,8 +237,8 @@ const RUBY_MOVIES = [
       "Un joven blade runner desentierra un secreto enterrado hace décadas que podría desestabilizar lo que queda de la sociedad.",
     descripcion:
       "Treinta años después de los hechos del primer Blade Runner, el oficial K, un replicante al servicio de la policía de Los Ángeles, descubre un secreto capaz de hundir a la sociedad en un caos aún mayor. Su búsqueda lo lleva a rastrear a Rick Deckard, desaparecido hace más de tres décadas, mientras enfrenta preguntas cada vez más incómodas sobre su propia identidad. Ciencia ficción pausada, visualmente monumental, sobre qué significa ser humano.",
-    poster: "assets/posters/009.jpg",
-    banner: "assets/banners/009.jpg",
+    poster: "assets/posters/blade-runner-2049.jpg",
+    banner: "assets/banners/blade-runner-2049.jpg",
     tono: "teal",
     categoria: "scifi",
     featured: true,
@@ -258,8 +260,8 @@ const RUBY_MOVIES = [
       "El heredero de una casa noble es enviado a un planeta desértico que esconde el recurso más valioso del universo, y con él, una guerra que lo superará.",
     descripcion:
       "Paul Atreides, heredero de la Casa Atreides, viaja junto a su familia al peligroso planeta desértico Arrakis para hacerse cargo de la producción de la especia, el recurso más valioso de la galaxia. Lo que parece una oportunidad se revela como una trampa política que desata una guerra devastadora. En medio de la traición, Paul empieza a descubrir un propósito que excede cualquier plan familiar, guiado por visiones que no puede explicar del todo.",
-    poster: "assets/posters/010.jpg",
-    banner: "assets/banners/010.jpg",
+    poster: "assets/posters/dune.jpg",
+    banner: "assets/banners/dune.jpg",
     tono: "amber",
     categoria: "scifi",
     featured: true,
