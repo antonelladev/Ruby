@@ -70,16 +70,30 @@
             data-profile-trigger
             aria-expanded="false"
             aria-haspopup="true"
+            aria-label="Cuenta de Usuario"
           >
-            <span class="profile-avatar">A</span>
+            <span class="profile-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="8.2" r="3.4" />
+                <path d="M4.6 19.4c1.15-3.65 3.95-5.7 7.4-5.7s6.25 2.05 7.4 5.7" />
+              </svg>
+            </span>
             <span class="profile-caret">&#9662;</span>
           </button>
           <div class="profile-menu" data-profile-menu role="menu">
-            <a href="#" role="menuitem">Antonella</a>
+            <a href="cuenta.html" class="profile-menu-header" role="menuitem">
+              <span class="profile-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <circle cx="12" cy="8.2" r="3.4" />
+                  <path d="M4.6 19.4c1.15-3.65 3.95-5.7 7.4-5.7s6.25 2.05 7.4 5.7" />
+                </svg>
+              </span>
+              <span class="profile-menu-name">Usuario</span>
+            </a>
             <div class="profile-menu-divider"></div>
             <a href="mi-lista.html" role="menuitem">Mi Lista</a>
-            <a href="#" role="menuitem">Cuenta</a>
-            <a href="#" role="menuitem">Cerrar sesión</a>
+            <a href="cuenta.html" role="menuitem">Cuenta</a>
+            <a href="#" role="menuitem" data-logout>Cerrar sesión</a>
           </div>
         </div>
       </div>

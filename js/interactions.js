@@ -117,6 +117,17 @@ const Interactions = (() => {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
     });
+
+    // RUBY has no real authentication — this only clears the demo profile
+    // menu state and returns to Inicio, it doesn't call any backend.
+    const logoutLink = menu.querySelector("[data-logout]");
+    if (logoutLink) {
+      logoutLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        close();
+        window.location.href = "index.html";
+      });
+    }
   }
 
   /* ---------------------------------------------------------------- */
