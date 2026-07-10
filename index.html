@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RUBY — Cine sin interrupciones.</title>
+  <title>RUBY — Cine sin distracciones</title>
   <meta name="description" content="RUBY: una selección curada de cine y series, sin ruido." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -109,6 +109,7 @@
     // pelicula.html.
     document.addEventListener("DOMContentLoaded", () => {
       Render.renderHeroSlider(document.querySelector("[data-hero-slider]"));
+      Render.renderAllMoviesRow(document.querySelector("[data-rows-mount]"));
       Render.renderCategoryRows(document.querySelector("[data-rows-mount]"));
       Interactions.init();
     });

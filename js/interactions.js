@@ -12,7 +12,7 @@ const Interactions = (() => {
   ).matches;
 
   const HOVER_OPEN_DELAY = 320; // ms — avoids flicker while scanning a row
-  const HOVER_CLOSE_DELAY = 140;
+  const HOVER_CLOSE_DELAY = 0; // close as soon as the pointer leaves
   const SLIDE_INTERVAL = 7000; // ms between automatic hero transitions
 
   let hoverCard = null;
@@ -269,8 +269,9 @@ const Interactions = (() => {
 
     const existingImg = posterEl.querySelector(".hover-card__poster-img");
     if (existingImg) existingImg.remove();
-    posterEl.appendChild(
-      Render.imageWithFallback(movie.poster, movie.titulo, "hover-card__poster-img")
+    posterEl.insertBefore(
+      Render.imageWithFallback(movie.poster, movie.titulo, "hover-card__poster-img"),
+      posterEl.querySelector(".hover-card__spine")
     );
 
     hoverCard.querySelector(".hover-card__spine").textContent = movie.spine;
@@ -293,14 +294,14 @@ const Interactions = (() => {
 
   function positionHoverCard(cardEl) {
     const rect = cardEl.getBoundingClientRect();
-    const cardWidth = 300;
+    const cardWidth = 270;
     const margin = 12;
 
     let left = rect.left + rect.width / 2 - cardWidth / 2;
     left = Math.max(margin, Math.min(left, window.innerWidth - cardWidth - margin));
 
-    let top = rect.top - 34; // rise slightly above the poster
-    const estHeight = 340;
+    let top = rect.top - 30; // rise slightly above the poster
+    const estHeight = 310;
     if (top + estHeight > window.innerHeight - margin) {
       top = Math.max(margin, window.innerHeight - estHeight - margin);
     }
@@ -340,6 +341,20 @@ const Interactions = (() => {
     }, HOVER_CLOSE_DELAY);
   }
 
+  /**
+   * Hides the hover card with no delay at all — used for scrolling, where
+   * the card must never be allowed to drift away from the poster it's
+   * anchored to.
+   */
+  function closeHoverCardNow() {
+    clearTimeout(openTimer);
+    clearTimeout(closeTimer);
+    hoverCard.classList.remove("hover-card--visible");
+    hoverCard.setAttribute("aria-hidden", "true");
+    if (activeCardEl) activeCardEl.classList.remove("card--active");
+    activeCardEl = null;
+  }
+
   function initHoverCards() {
     hoverCard = buildHoverCard();
 
@@ -351,6 +366,15 @@ const Interactions = (() => {
       cardEl.addEventListener("mouseleave", () => closeHoverCard(cardEl));
       cardEl.addEventListener("focus", () => openHoverCard(cardEl));
       cardEl.addEventListener("blur", () => closeHoverCard(cardEl));
+    });
+
+    // Any scroll — the page itself or a horizontally-scrolling row — closes
+    // the card instantly instead of letting it float disconnected from its
+    // poster. Capture phase so it also catches scroll events from nested
+    // scrollers like .row-scroller, which don't bubble.
+    window.addEventListener("scroll", closeHoverCardNow, {
+      passive: true,
+      capture: true,
     });
   }
 

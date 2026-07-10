@@ -4,7 +4,7 @@
 
 @media (max-width: 1024px) {
   .card {
-    width: 156px;
+    width: 210px;
   }
 
   .hero {
@@ -32,11 +32,11 @@
 
 @media (max-width: 640px) {
   :root {
-    --nav-height: 60px;
+    --nav-height: 76px;
   }
 
   .brand-mark {
-    font-size: 19px;
+    font-size: 21px;
   }
 
   .search-input {
@@ -75,11 +75,11 @@
   }
 
   .card {
-    width: 132px;
+    width: 178px;
   }
 
   .row-title {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .row-nav {
@@ -87,17 +87,17 @@
   }
 
   .hover-card {
-    width: 260px;
+    width: 235px;
   }
 }
 
 @media (max-width: 400px) {
   .card {
-    width: 118px;
+    width: 160px;
   }
 
   .poster-initial {
-    font-size: 38px;
+    font-size: 50px;
   }
 }
 

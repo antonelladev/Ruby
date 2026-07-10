@@ -103,7 +103,7 @@
 .card {
   display: block;
   flex: 0 0 auto;
-  width: 176px;
+  width: 250px;
   scroll-snap-align: start;
   cursor: pointer;
   border-radius: var(--radius-sm);
@@ -130,8 +130,22 @@
 .poster-initial {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 52px;
+  font-size: 74px;
   color: rgba(243, 242, 238, 0.14);
+}
+
+.poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.poster-img.is-loaded {
+  opacity: 1;
 }
 
 .poster .spine {
@@ -141,17 +155,21 @@
 }
 
 .card-info {
-  padding: 10px 2px 0;
+  padding: 13px 2px 0;
 }
 
 .card-title {
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-white);
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.card .meta-row {
+  font-size: 13.5px;
 }
 
 .card:hover .poster,
@@ -160,14 +178,18 @@
   transform: scale(1.045);
   border-color: var(--color-border-strong);
   box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7);
+  z-index: 5;
 }
 
 /* Floating hover-detail card -------------------------------------------------- */
 
 .hover-card {
   position: fixed;
-  width: 300px;
-  z-index: 200;
+  width: 270px;
+  /* Explicitly above every row/card stacking context (.rows sits at 1,
+     row-nav at 2, navbar at 100) so it can never end up behind a poster,
+     while staying below the toast (300) and skip-link (1000). */
+  z-index: 260;
   background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
@@ -196,10 +218,24 @@
   place-items: center;
 }
 
+.hover-card__poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.hover-card__poster-img.is-loaded {
+  opacity: 1;
+}
+
 .hover-card__initial {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 40px;
+  font-size: 37px;
   color: rgba(243, 242, 238, 0.16);
 }
 
@@ -218,15 +254,15 @@
 }
 
 .hover-card__body {
-  padding: 16px;
+  padding: 15px;
 }
 
 .hover-card__title {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 19px;
+  font-size: 18.5px;
   color: var(--color-white);
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
 .hover-card__meta {
@@ -234,11 +270,17 @@
 }
 
 .hover-card__genres {
-  margin-bottom: 12px;
+  margin-bottom: 11px;
 }
 
 .hover-card__desc {
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--color-white-dim);
+}
+
+.hover-card .btn--details {
+  padding: 11px 20px;
+  font-size: 15px;
+  margin-top: 12px;
 }

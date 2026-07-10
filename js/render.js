@@ -358,9 +358,20 @@ const Render = (() => {
     getCategories().forEach((category) => buildRow(category, mount));
   }
 
+  /**
+   * Builds the "Todas las películas" row directly from RUBY_MOVIES — the
+   * entire catalog, in catalog order. Add a movie to js/movies.js and it
+   * appears here automatically, same as every category row.
+   */
+  function renderAllMoviesRow(mount) {
+    if (!mount) return;
+    buildRow({ id: "todas", label: "Todas las películas", titles: RUBY_MOVIES }, mount);
+  }
+
   return {
     renderHeroSlider,
     renderCategoryRows,
+    renderAllMoviesRow,
     buildRow,
     createCard,
     posterVisual,
