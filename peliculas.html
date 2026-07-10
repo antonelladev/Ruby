@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RUBY — Cine sin distracciones</title>
-  <meta name="description" content="RUBY: una selección curada de cine y series, sin ruido." />
+  <title>Películas — RUBY</title>
+  <meta name="description" content="Catálogo completo de películas en RUBY, organizado por género." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,11 +20,11 @@
 <body>
   <a href="#main-content" class="skip-link visually-hidden">Saltar al contenido principal</a>
 
-  <!-- ==================== NAVBAR ==================== -->
+  <!-- ==================== NAVBAR (same component as index.html) ==================== -->
   <header class="navbar">
     <div class="navbar-inner">
       <a
-        href="#"
+        href="index.html"
         class="brand"
         data-brand-logo="assets/logo/logo.png"
         aria-label="RUBY, ir al inicio"
@@ -33,8 +33,8 @@
       </a>
 
       <nav class="nav-menu" aria-label="Navegación principal">
-        <a href="index.html" class="is-current">Inicio</a>
-        <a href="peliculas.html">Películas</a>
+        <a href="index.html">Inicio</a>
+        <a href="peliculas.html" class="is-current">Películas</a>
         <a href="series.html">Series</a>
         <a href="documentales.html">Documentales</a>
         <a href="mi-lista.html">Mi Lista</a>
@@ -88,25 +88,23 @@
 
   <main id="main-content">
     <!-- ==================== HERO SLIDER ==================== -->
-    <!-- Built entirely by Render.renderHeroSlider() from every movie in
-         js/movies.js with featured: true. Add/remove a featured movie
-         there and the slider updates automatically — nothing here to edit. -->
+    <!-- Same Render.renderHeroSlider() used on Home — built from every
+         movie in js/movies.js with featured: true. -->
     <section class="hero-slider" data-hero-slider aria-label="Películas destacadas"></section>
 
     <!-- ==================== CATALOG ROWS ==================== -->
     <!-- Built entirely by Render.renderCategoryRows() — one row per
-         distinct `categoria` found in js/movies.js. -->
-    <div class="rows" data-rows-mount aria-label="Catálogo por categoría"></div>
+         distinct `categoria` found in js/movies.js. Series never appear
+         here: this page only ever reads from RUBY_MOVIES. -->
+    <div class="rows" data-rows-mount aria-label="Catálogo de películas por género"></div>
   </main>
 
   <script src="js/movies.js"></script>
   <script src="js/render.js"></script>
   <script src="js/interactions.js"></script>
   <script>
-    // Home-page bootstrap: read data, render it, wire interactions.
-    // Kept inline since it's a handful of lines specific to this page —
-    // see js/detail.js for the equivalent (larger) controller used by
-    // pelicula.html.
+    // Películas bootstrap: identical pattern to index.html's, reading
+    // only from RUBY_MOVIES — nothing series-related is ever touched here.
     document.addEventListener("DOMContentLoaded", () => {
       Render.renderHeroSlider(document.querySelector("[data-hero-slider]"));
       Render.renderAllMoviesRow(document.querySelector("[data-rows-mount]"));

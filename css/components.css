@@ -284,3 +284,44 @@
   font-size: 15px;
   margin-top: 12px;
 }
+
+/* Catalog page header ------------------------------------------------------
+   Used by pages that list titles without a hero slider above them
+   (series.html, mi-lista.html) — a plain title + intro line that clears
+   the fixed navbar on its own. */
+
+.catalog-header {
+  padding: calc(var(--nav-height) + 56px) var(--gutter) 8px;
+  max-width: 640px;
+}
+
+.catalog-header__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white-faint);
+  margin-bottom: 12px;
+}
+
+.catalog-header__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 40px;
+  color: var(--color-white);
+  margin-bottom: 10px;
+}
+
+.catalog-header__text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--color-white-dim);
+  max-width: 56ch;
+}
+
+/* .rows normally carries a negative top margin to blend into the hero
+   slider above it (see styles.css) — pages with a plain header instead
+   need that reset so rows don't get pulled up under the title. */
+.rows--flat {
+  margin-top: 0;
+}
