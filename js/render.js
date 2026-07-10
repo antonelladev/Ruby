@@ -1,13 +1,32 @@
 /**
  * RUBY — Render Layer
  * -----------------------------------------------------------------------
- * Pure(ish) DOM construction. Nothing in here attaches event listeners —
- * that responsibility belongs to interactions.js. Keeping the split lets
- * later phases swap the render strategy (e.g. virtualized rows) without
- * touching interaction logic, and vice versa.
+ * Pure(ish) DOM construction, driven entirely by js/movies.js. Nothing in
+ * here attaches event listeners — that's interactions.js. Keeping the
+ * split lets the render strategy change later without touching
+ * interaction logic, and vice versa.
  */
 
 const Render = (() => {
+  /**
+   * An <img> that fades in once loaded and quietly removes itself if the
+   * file is missing, letting whatever gradient/initial sits behind it
+   * show through untouched. This is the one place image-fallback
+   * behavior lives — every poster, hover-card thumbnail, hero banner and
+   * detail banner reuses it.
+   */
+  function imageWithFallback(src, alt, className, { eager = false } = {}) {
+    const img = document.createElement("img");
+    img.className = className;
+    img.alt = alt;
+    img.loading = eager ? "eager" : "lazy";
+    if (eager) img.setAttribute("fetchpriority", "high");
+    img.addEventListener("load", () => img.classList.add("is-loaded"));
+    img.addEventListener("error", () => img.remove());
+    img.src = src;
+    return img;
+  }
+
   /**
    * Builds the corner spine-number badge shared by poster and hover card.
    */
@@ -18,13 +37,13 @@ const Render = (() => {
     return el;
   }
 
-  function metaRow({ year, duration, rating }) {
+  function metaRow({ año, duracion, rating }) {
     const row = document.createElement("div");
     row.className = "meta-row";
 
     const parts = [
-      { text: year, cls: "meta-year" },
-      { text: duration, cls: "meta-duration" },
+      { text: año, cls: "meta-year" },
+      { text: duracion, cls: "meta-duration" },
     ];
 
     parts.forEach((p, i) => {
@@ -54,10 +73,10 @@ const Render = (() => {
     return d;
   }
 
-  function genreTags(genres) {
+  function genreTags(generos) {
     const wrap = document.createElement("div");
     wrap.className = "genre-tags";
-    genres.forEach((g) => {
+    generos.forEach((g) => {
       const tag = document.createElement("span");
       tag.className = "genre-tag";
       tag.textContent = g;
@@ -67,89 +86,221 @@ const Render = (() => {
   }
 
   /**
+   * The poster visual shared by cards, the hover card, and the detail
+   * page: a tone gradient + initial (always present, instant) with the
+   * real poster image layered on top once it loads.
+   */
+  function posterVisual(movie, { initialSize } = {}) {
+    const poster = document.createElement("div");
+    poster.className = `poster poster--tone-${movie.tono}`;
+
+    const inner = document.createElement("div");
+    inner.className = "poster-inner";
+    const initial = document.createElement("span");
+    initial.className = "poster-initial";
+    if (initialSize) initial.style.fontSize = initialSize;
+    initial.textContent = movie.titulo.charAt(0);
+    inner.appendChild(initial);
+    poster.appendChild(inner);
+
+    poster.appendChild(imageWithFallback(movie.poster, movie.titulo, "poster-img"));
+    poster.appendChild(spineBadge(movie.spine));
+
+    return poster;
+  }
+
+  /**
    * A single poster card. The hover card itself is NOT built here —
    * interactions.js builds one shared hover-card node on demand and
    * repositions/repopulates it, which is far cheaper than one hidden
    * hover-card per poster in a catalog that may grow to hundreds of titles.
    */
-  function createCard(title, categoryId) {
+  function createCard(movie, categoryId) {
     const card = document.createElement("a");
     card.className = "card";
-    card.href = `pelicula.html?id=${title.id}`;
-    card.dataset.spine = title.spine;
+    card.href = `pelicula.html?id=${movie.id}`;
+    card.dataset.spine = movie.spine;
     card.dataset.category = categoryId;
-    card.dataset.id = title.id;
-
-    const poster = document.createElement("div");
-    poster.className = `poster poster--tone-${title.tone}`;
-
-    const posterInner = document.createElement("div");
-    posterInner.className = "poster-inner";
-    const initial = document.createElement("span");
-    initial.className = "poster-initial";
-    initial.textContent = title.title.charAt(0);
-    posterInner.appendChild(initial);
-    poster.appendChild(posterInner);
-    poster.appendChild(spineBadge(title.spine));
+    card.dataset.id = movie.id;
 
     const info = document.createElement("div");
     info.className = "card-info";
     const cardTitle = document.createElement("h3");
     cardTitle.className = "card-title";
-    cardTitle.textContent = title.title;
+    cardTitle.textContent = movie.titulo;
     info.appendChild(cardTitle);
-    info.appendChild(metaRow(title));
+    info.appendChild(metaRow(movie));
 
-    card.appendChild(poster);
+    card.appendChild(posterVisual(movie));
     card.appendChild(info);
 
-    // Stash full record on the element for interactions.js to read on hover.
-    card._titleData = title;
+    // Stash the full record on the element for interactions.js to read on hover.
+    card._movieData = movie;
 
     return card;
   }
 
-  function renderHero(featured) {
-    const heroTitle = document.querySelector("[data-hero-title]");
-    const heroTagline = document.querySelector("[data-hero-tagline]");
-    const heroDesc = document.querySelector("[data-hero-description]");
-    const heroMeta = document.querySelector("[data-hero-meta]");
-    const heroSpine = document.querySelector("[data-hero-spine]");
-    const heroTone = document.querySelector("[data-hero-backdrop]");
+  /**
+   * Builds one <div class="hero-slide"> for the hero slider from a
+   * featured movie. Reused for every slide — no per-slide markup is
+   * ever hand-written.
+   */
+  function buildHeroSlide(movie, index) {
+    const slide = document.createElement("div");
+    slide.className = "hero-slide";
+    slide.dataset.slideIndex = String(index);
+    slide.setAttribute("role", "group");
+    slide.setAttribute("aria-roledescription", "diapositiva");
+    slide.setAttribute("aria-label", `${movie.titulo} — destacada`);
 
-    if (heroTitle) heroTitle.textContent = featured.title;
-    if (heroTagline) heroTagline.textContent = featured.tagline;
-    if (heroDesc) heroDesc.textContent = featured.description;
-    if (heroSpine) heroSpine.textContent = featured.spine;
-    if (heroTone) heroTone.classList.add(`backdrop--tone-${featured.tone}`);
+    const backdrop = document.createElement("div");
+    backdrop.className = `hero-backdrop backdrop--tone-${movie.tono}`;
+    backdrop.appendChild(
+      imageWithFallback(movie.banner, movie.titulo, "hero-backdrop-img", {
+        eager: index === 0,
+      })
+    );
 
-    const heroInfoLink = document.querySelector("[data-hero-info]");
-    if (heroInfoLink) heroInfoLink.href = `pelicula.html?id=${featured.id}`;
+    const grain = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    grain.setAttribute("class", "hero-grain");
+    grain.setAttribute("aria-hidden", "true");
+    const filterId = `grain-${movie.id}`;
+    grain.innerHTML = `
+      <filter id="${filterId}">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence>
+        <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"></feColorMatrix>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#${filterId})"></rect>
+    `;
+    backdrop.appendChild(grain);
 
-    if (heroMeta) {
-      heroMeta.innerHTML = "";
-      heroMeta.appendChild(
-        (() => {
-          const badge = document.createElement("span");
-          badge.className = "meta-item meta-maturity";
-          badge.textContent = featured.maturity;
-          return badge;
-        })()
-      );
-      heroMeta.appendChild(dot());
-      heroMeta.appendChild(metaRow(featured));
-      const genresLine = document.createElement("span");
-      genresLine.className = "hero-genres";
-      genresLine.textContent = featured.genres.join(" \u00B7 ");
-      heroMeta.appendChild(genresLine);
+    const content = document.createElement("div");
+    content.className = "hero-content";
+
+    content.appendChild(
+      (() => {
+        const s = document.createElement("span");
+        s.className = "spine hero-spine";
+        s.textContent = movie.spine;
+        return s;
+      })()
+    );
+
+    const title = document.createElement("h1");
+    title.className = "hero-title";
+    title.textContent = movie.titulo;
+    content.appendChild(title);
+
+    if (movie.tagline) {
+      const tagline = document.createElement("p");
+      tagline.className = "hero-tagline";
+      tagline.textContent = movie.tagline;
+      content.appendChild(tagline);
+    }
+
+    const meta = document.createElement("div");
+    meta.className = "hero-meta";
+    const maturityBadge = document.createElement("span");
+    maturityBadge.className = "meta-item meta-maturity";
+    maturityBadge.textContent = movie.clasificacion;
+    meta.appendChild(maturityBadge);
+    meta.appendChild(dot());
+    meta.appendChild(metaRow(movie));
+    const genresLine = document.createElement("span");
+    genresLine.className = "hero-genres";
+    genresLine.textContent = movie.generos.join(" \u00B7 ");
+    meta.appendChild(genresLine);
+    content.appendChild(meta);
+
+    const description = document.createElement("p");
+    description.className = "hero-description";
+    description.textContent = movie.descripcionCorta;
+    content.appendChild(description);
+
+    const actions = document.createElement("div");
+    actions.className = "hero-actions";
+
+    const playBtn = document.createElement("button");
+    playBtn.type = "button";
+    playBtn.className = "btn btn--primary";
+    playBtn.innerHTML =
+      '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ver ahora';
+    actions.appendChild(playBtn);
+
+    const infoLink = document.createElement("a");
+    infoLink.className = "btn btn--text";
+    infoLink.href = `pelicula.html?id=${movie.id}`;
+    infoLink.textContent = "Más información";
+    actions.appendChild(infoLink);
+
+    content.appendChild(actions);
+
+    slide.appendChild(backdrop);
+    slide.appendChild(content);
+    return slide;
+  }
+
+  /**
+   * Builds the full hero slider (slides + arrows + dots) from
+   * getFeaturedMovies() and mounts it. Autoplay/pause/keyboard behavior
+   * is wired separately by Interactions.initHeroSlider — this function
+   * only builds markup.
+   */
+  function renderHeroSlider(mount) {
+    if (!mount) return;
+    const movies = getFeaturedMovies();
+
+    const slidesWrap = document.createElement("div");
+    slidesWrap.className = "hero-slides";
+    slidesWrap.setAttribute("data-hero-slides", "");
+    movies.forEach((movie, i) => {
+      const slide = buildHeroSlide(movie, i);
+      if (i === 0) slide.classList.add("hero-slide--active");
+      slidesWrap.appendChild(slide);
+    });
+    mount.appendChild(slidesWrap);
+
+    if (movies.length > 1) {
+      const prev = document.createElement("button");
+      prev.type = "button";
+      prev.className = "hero-arrow hero-arrow--prev";
+      prev.setAttribute("data-hero-prev", "");
+      prev.setAttribute("aria-label", "Película destacada anterior");
+      prev.innerHTML = "&#8249;";
+
+      const next = document.createElement("button");
+      next.type = "button";
+      next.className = "hero-arrow hero-arrow--next";
+      next.setAttribute("data-hero-next", "");
+      next.setAttribute("aria-label", "Siguiente película destacada");
+      next.innerHTML = "&#8250;";
+
+      const dots = document.createElement("div");
+      dots.className = "hero-dots";
+      dots.setAttribute("data-hero-dots", "");
+      dots.setAttribute("role", "group");
+      dots.setAttribute("aria-label", "Seleccionar película destacada");
+      movies.forEach((movie, i) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "hero-dot";
+        if (i === 0) dot.classList.add("hero-dot--active");
+        dot.dataset.dotIndex = String(i);
+        dot.setAttribute("aria-current", i === 0 ? "true" : "false");
+        dot.setAttribute("aria-label", `Ir a "${movie.titulo}"`);
+        dots.appendChild(dot);
+      });
+
+      mount.appendChild(prev);
+      mount.appendChild(next);
+      mount.appendChild(dots);
     }
   }
 
   /**
    * Builds one horizontal row (heading + scroll-snapped cards + prev/next
-   * nav) and appends it to `mount`. Used both for home-page categories and
-   * for the detail page's "Películas similares" / "Más como esta" rows,
-   * so the two pages never diverge visually.
+   * nav) and appends it to `mount`. Used for home-page categories, the
+   * detail page's related rows, so they never diverge visually.
    */
   function buildRow({ id, label, titles }, mount) {
     if (!titles.length) return null;
@@ -184,8 +335,8 @@ const Render = (() => {
     scroller.className = "row-scroller";
     scroller.dataset.categoryId = id;
 
-    titles.forEach((title) => {
-      scroller.appendChild(createCard(title, id));
+    titles.forEach((movie) => {
+      scroller.appendChild(createCard(movie, id));
     });
 
     track.appendChild(prevBtn);
@@ -197,15 +348,23 @@ const Render = (() => {
     return section;
   }
 
-  function renderCategories(categories, mount) {
-    categories.forEach((category) => buildRow(category, mount));
+  /**
+   * Builds every category row directly from movies.js (see
+   * getCategories()) — add a movie with a new `categoria` and a new row
+   * appears here automatically, no HTML changes required.
+   */
+  function renderCategoryRows(mount) {
+    if (!mount) return;
+    getCategories().forEach((category) => buildRow(category, mount));
   }
 
   return {
-    renderHero,
-    renderCategories,
+    renderHeroSlider,
+    renderCategoryRows,
     buildRow,
     createCard,
+    posterVisual,
+    imageWithFallback,
     genreTags,
     metaRow,
   };

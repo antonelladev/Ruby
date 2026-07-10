@@ -18,11 +18,18 @@
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
 <body>
+  <a href="#main-content" class="skip-link visually-hidden">Saltar al contenido principal</a>
+
   <!-- ==================== NAVBAR ==================== -->
   <header class="navbar">
     <div class="navbar-inner">
-      <a href="#" class="brand" aria-label="RUBY, ir al inicio">
-        <span class="brand-mark">RUB<span>Y</span></span>
+      <a
+        href="#"
+        class="brand"
+        data-brand-logo="assets/logo/logo.png"
+        aria-label="RUBY, ir al inicio"
+      >
+        <span class="brand-mark" data-brand-wordmark>RUB<span>Y</span></span>
       </a>
 
       <nav class="nav-menu" aria-label="Navegación principal">
@@ -79,49 +86,20 @@
     </div>
   </header>
 
-  <main>
-    <!-- ==================== HERO ==================== -->
-    <section class="hero" aria-label="Título destacado">
-      <div class="hero-backdrop" data-hero-backdrop>
-        <svg class="hero-grain" aria-hidden="true">
-          <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence>
-            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"></feColorMatrix>
-          </filter>
-          <rect width="100%" height="100%" filter="url(#grain)"></rect>
-        </svg>
-      </div>
-
-      <div class="hero-content">
-        <span class="spine hero-spine" data-hero-spine></span>
-        <h1 class="hero-title" data-hero-title></h1>
-        <p class="hero-tagline" data-hero-tagline></p>
-        <div class="hero-meta" data-hero-meta></div>
-        <p class="hero-description" data-hero-description></p>
-
-        <div class="hero-actions">
-          <button type="button" class="btn btn--primary">
-            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Ver ahora
-          </button>
-          <button type="button" class="btn btn--ghost">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Mi Lista
-          </button>
-          <a href="#" class="btn btn--text" data-hero-info>Más información</a>
-        </div>
-      </div>
-    </section>
+  <main id="main-content">
+    <!-- ==================== HERO SLIDER ==================== -->
+    <!-- Built entirely by Render.renderHeroSlider() from every movie in
+         js/movies.js with featured: true. Add/remove a featured movie
+         there and the slider updates automatically — nothing here to edit. -->
+    <section class="hero-slider" data-hero-slider aria-label="Películas destacadas"></section>
 
     <!-- ==================== CATALOG ROWS ==================== -->
-    <div class="rows" data-rows-mount aria-label="Catálogo por categoría">
-      <!-- Populated by js/render.js from js/data.js -->
-    </div>
+    <!-- Built entirely by Render.renderCategoryRows() — one row per
+         distinct `categoria` found in js/movies.js. -->
+    <div class="rows" data-rows-mount aria-label="Catálogo por categoría"></div>
   </main>
 
-  <script src="js/data.js"></script>
+  <script src="js/movies.js"></script>
   <script src="js/render.js"></script>
   <script src="js/interactions.js"></script>
   <script>
@@ -130,13 +108,8 @@
     // see js/detail.js for the equivalent (larger) controller used by
     // pelicula.html.
     document.addEventListener("DOMContentLoaded", () => {
-      const rowsMount = document.querySelector("[data-rows-mount]");
-
-      Render.renderHero(RUBY_CATALOG.featured);
-      if (rowsMount) {
-        Render.renderCategories(RUBY_CATALOG.categories, rowsMount);
-      }
-
+      Render.renderHeroSlider(document.querySelector("[data-hero-slider]"));
+      Render.renderCategoryRows(document.querySelector("[data-rows-mount]"));
       Interactions.init();
     });
   </script>

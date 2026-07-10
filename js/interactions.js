@@ -3,7 +3,7 @@
  * -----------------------------------------------------------------------
  * Wires up behavior on top of the markup Render produced. One shared
  * hover-card node is reused for every poster (rather than one per card)
- * so this scales cleanly as the catalog grows in later phases.
+ * so this scales cleanly as the catalog grows.
  */
 
 const Interactions = (() => {
@@ -13,6 +13,7 @@ const Interactions = (() => {
 
   const HOVER_OPEN_DELAY = 320; // ms — avoids flicker while scanning a row
   const HOVER_CLOSE_DELAY = 140;
+  const SLIDE_INTERVAL = 7000; // ms between automatic hero transitions
 
   let hoverCard = null;
   let openTimer = null;
@@ -33,8 +34,31 @@ const Interactions = (() => {
     applyState();
     window.addEventListener("scroll", applyState, { passive: true });
 
+    initLogo(nav);
     initSearch(nav);
     initProfileMenu(nav);
+  }
+
+  /**
+   * Loads assets/logo/logo.png into the navbar. If the file doesn't
+   * exist yet (or fails to load), the existing "RUBY" text wordmark
+   * stays exactly as it is — nothing breaks.
+   */
+  function initLogo(nav) {
+    const brand = nav.querySelector("[data-brand-logo]");
+    const wordmark = nav.querySelector("[data-brand-wordmark]");
+    if (!brand || !wordmark) return;
+
+    const logo = new Image();
+    logo.onload = () => {
+      logo.className = "brand-logo-img";
+      logo.alt = "RUBY";
+      wordmark.replaceWith(logo);
+    };
+    logo.onerror = () => {
+      // assets/logo/logo.png not provided yet — keep the text wordmark.
+    };
+    logo.src = brand.dataset.brandLogo;
   }
 
   function initSearch(nav) {
@@ -93,6 +117,85 @@ const Interactions = (() => {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
     });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Hero slider                                                       */
+  /* ---------------------------------------------------------------- */
+
+  /**
+   * Autoplay + arrows + dots + pause-on-hover for the hero slider built
+   * by Render.renderHeroSlider. Safe to call even if the slider only has
+   * one slide (arrows/dots won't exist — see Render).
+   */
+  function initHeroSlider() {
+    const slider = document.querySelector("[data-hero-slider]");
+    const slidesWrap = document.querySelector("[data-hero-slides]");
+    if (!slider || !slidesWrap) return;
+
+    const slides = Array.from(slidesWrap.querySelectorAll(".hero-slide"));
+    if (slides.length <= 1) return; // nothing to cycle through
+
+    const prevBtn = slider.querySelector("[data-hero-prev]");
+    const nextBtn = slider.querySelector("[data-hero-next]");
+    const dots = Array.from(slider.querySelectorAll("[data-hero-dots] .hero-dot"));
+
+    let current = 0;
+    let timer = null;
+
+    function goTo(index) {
+      const next = (index + slides.length) % slides.length;
+      slides[current].classList.remove("hero-slide--active");
+      if (dots[current]) {
+        dots[current].classList.remove("hero-dot--active");
+        dots[current].setAttribute("aria-current", "false");
+      }
+      current = next;
+      slides[current].classList.add("hero-slide--active");
+      if (dots[current]) {
+        dots[current].classList.add("hero-dot--active");
+        dots[current].setAttribute("aria-current", "true");
+      }
+    }
+
+    function next() {
+      goTo(current + 1);
+    }
+
+    function restart() {
+      stop();
+      if (prefersReducedMotion) return; // no forced motion for this user
+      timer = setInterval(next, SLIDE_INTERVAL);
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    prevBtn &&
+      prevBtn.addEventListener("click", () => {
+        goTo(current - 1);
+        restart();
+      });
+    nextBtn &&
+      nextBtn.addEventListener("click", () => {
+        goTo(current + 1);
+        restart();
+      });
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        goTo(i);
+        restart();
+      });
+    });
+
+    slider.addEventListener("mouseenter", stop);
+    slider.addEventListener("mouseleave", restart);
+    slider.addEventListener("focusin", stop);
+    slider.addEventListener("focusout", restart);
+
+    restart();
   }
 
   /* ---------------------------------------------------------------- */
@@ -158,27 +261,34 @@ const Interactions = (() => {
     return el;
   }
 
-  function populateHoverCard(title) {
+  function populateHoverCard(movie) {
     hoverCard.querySelector(".hover-card__initial").textContent =
-      title.title.charAt(0);
+      movie.titulo.charAt(0);
     const posterEl = hoverCard.querySelector(".hover-card__poster");
-    posterEl.className = `hover-card__poster poster--tone-${title.tone}`;
-    hoverCard.querySelector(".hover-card__spine").textContent = title.spine;
-    hoverCard.querySelector(".hover-card__title").textContent = title.title;
+    posterEl.className = `hover-card__poster poster--tone-${movie.tono}`;
+
+    const existingImg = posterEl.querySelector(".hover-card__poster-img");
+    if (existingImg) existingImg.remove();
+    posterEl.appendChild(
+      Render.imageWithFallback(movie.poster, movie.titulo, "hover-card__poster-img")
+    );
+
+    hoverCard.querySelector(".hover-card__spine").textContent = movie.spine;
+    hoverCard.querySelector(".hover-card__title").textContent = movie.titulo;
 
     const metaWrap = hoverCard.querySelector(".hover-card__meta");
     metaWrap.innerHTML = "";
-    metaWrap.appendChild(Render.metaRow(title));
+    metaWrap.appendChild(Render.metaRow(movie));
 
     const genresWrap = hoverCard.querySelector(".hover-card__genres");
     genresWrap.innerHTML = "";
-    genresWrap.appendChild(Render.genreTags(title.genres));
+    genresWrap.appendChild(Render.genreTags(movie.generos));
 
     hoverCard.querySelector(".hover-card__desc").textContent =
-      title.description;
+      movie.descripcionCorta;
 
     hoverCard.querySelector("[data-hover-details]").href =
-      `pelicula.html?id=${title.id}`;
+      `pelicula.html?id=${movie.id}`;
   }
 
   function positionHoverCard(cardEl) {
@@ -210,7 +320,7 @@ const Interactions = (() => {
 
     openTimer = setTimeout(() => {
       activeCardEl = cardEl;
-      populateHoverCard(cardEl._titleData);
+      populateHoverCard(cardEl._movieData);
       positionHoverCard(cardEl);
       hoverCard.classList.add("hover-card--visible");
       hoverCard.setAttribute("aria-hidden", "false");
@@ -250,6 +360,7 @@ const Interactions = (() => {
 
   function init() {
     initNavbar();
+    initHeroSlider();
     initRowNav();
     initHoverCards();
   }

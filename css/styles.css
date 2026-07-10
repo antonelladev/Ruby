@@ -146,6 +146,27 @@ input {
   border: 0;
 }
 
+/* Skip link — hidden like any .visually-hidden content until a keyboard
+   user tabs to it, at which point it needs to become visible again. */
+.skip-link:focus {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: auto;
+  height: auto;
+  padding: 12px 18px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  z-index: 1000;
+  background: var(--color-red);
+  color: var(--color-white);
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+}
+
 /* Shared meta-row / micro-typography ------------------------------------ */
 
 .meta-row {
@@ -274,6 +295,12 @@ input {
   color: var(--color-red);
 }
 
+.brand-logo-img {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+
 .nav-menu {
   display: flex;
   align-items: center;
@@ -286,11 +313,13 @@ input {
   color: var(--color-white-dim);
   padding: 6px 2px;
   border-bottom: 1px solid transparent;
-  transition: color var(--dur-fast) var(--ease-standard);
+  transition: color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
 }
 
 .nav-menu a:hover {
   color: var(--color-white);
+  border-bottom-color: var(--color-border-strong);
 }
 
 .nav-menu a.is-current {
@@ -430,13 +459,34 @@ input {
 
 /* Hero --------------------------------------------------------------------- */
 
-.hero {
+/* Hero Slider ------------------------------------------------------------ */
+
+.hero-slider {
   position: relative;
   height: 88vh;
   min-height: 560px;
+  overflow: hidden;
+}
+
+.hero-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: flex-end;
-  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.hero-slide--active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .hero-backdrop {
@@ -455,6 +505,20 @@ input {
 .backdrop--tone-crimson {
   --tone-a: var(--tone-crimson-a);
   --tone-b: var(--tone-crimson-b);
+}
+
+.hero-backdrop-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.hero-backdrop-img.is-loaded {
+  opacity: 1;
 }
 
 .hero-backdrop::after {
@@ -538,6 +602,72 @@ input {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+/* Hero Slider — arrows & dots --------------------------------------------- */
+
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: var(--color-white);
+  background: rgba(10, 10, 10, 0.35);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+.hero-slider:hover .hero-arrow,
+.hero-slider:focus-within .hero-arrow {
+  opacity: 1;
+}
+
+.hero-arrow:hover {
+  background: rgba(10, 10, 10, 0.6);
+}
+
+.hero-arrow--prev {
+  left: var(--gutter);
+}
+
+.hero-arrow--next {
+  right: var(--gutter);
+}
+
+.hero-dots {
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter);
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-dot {
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.28);
+  transition: background var(--dur-fast) var(--ease-standard),
+    width var(--dur-fast) var(--ease-standard);
+}
+
+.hero-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.hero-dot--active {
+  width: 34px;
+  background: var(--color-red);
 }
 
 /* Rows ----------------------------------------------------------------------- */
