@@ -374,3 +374,40 @@ function findRecommendedTitles(target, limit = 8) {
     ? findRecommendedSeries(target, limit)
     : findRecommended(target, limit);
 }
+
+/**
+ * Titles for the Home hero slider — every title (movie or series) with
+ * `featured: true`, across the combined catalog. Mirrors
+ * getFeaturedMovies() from movies.js, but mixed.
+ */
+function getFeaturedTitles() {
+  const featured = RUBY_ALL_TITLES.filter((t) => t.featured);
+  return featured.length ? featured : RUBY_ALL_TITLES.slice(0, 1);
+}
+
+/**
+ * One row per distinct `categoria` found across the combined catalog
+ * (películas + series), in first-seen order — same bucketing logic as
+ * getCategories() / getSeriesCategories(), except a row here can contain
+ * both movies and series under the same categoria (e.g. "scifi" holds
+ * both Interstellar and Stranger Things). Used only by the Home page;
+ * Películas and Series keep their own movies-only / series-only rows.
+ */
+function getAllCategories() {
+  const order = [];
+  const buckets = {};
+
+  RUBY_ALL_TITLES.forEach((title) => {
+    if (!buckets[title.categoria]) {
+      buckets[title.categoria] = [];
+      order.push(title.categoria);
+    }
+    buckets[title.categoria].push(title);
+  });
+
+  return order.map((slug) => ({
+    id: slug,
+    label: categoryLabel(slug),
+    titles: buckets[slug],
+  }));
+}

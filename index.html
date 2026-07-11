@@ -36,7 +36,6 @@
         <a href="index.html" class="is-current">Inicio</a>
         <a href="peliculas.html">Películas</a>
         <a href="series.html">Series</a>
-        <a href="documentales.html">Documentales</a>
         <a href="mi-lista.html">Mi Lista</a>
       </nav>
 
@@ -102,18 +101,24 @@
 
   <main id="main-content">
     <!-- ==================== HERO SLIDER ==================== -->
-    <!-- Built entirely by Render.renderHeroSlider() from every movie in
-         js/movies.js with featured: true. Add/remove a featured movie
-         there and the slider updates automatically — nothing here to edit. -->
-    <section class="hero-slider" data-hero-slider aria-label="Películas destacadas"></section>
+    <!-- Built entirely by Render.renderHeroSlider() from every title (movie
+         or series) with featured: true, across js/movies.js and js/series.js
+         (see getFeaturedTitles() in js/series.js). Add/remove a featured
+         title there and the slider updates automatically — nothing here
+         to edit. -->
+    <section class="hero-slider" data-hero-slider aria-label="Títulos destacados"></section>
 
     <!-- ==================== CATALOG ROWS ==================== -->
-    <!-- Built entirely by Render.renderCategoryRows() — one row per
-         distinct `categoria` found in js/movies.js. -->
+    <!-- Built entirely by Render.buildRow() — one row per distinct
+         `categoria` found across the combined catalog (getAllCategories(),
+         js/series.js), so each row can mix películas and series. Uses the
+         exact same Render.buildRow/createCard as Películas and Series, so
+         card sizes, navbar and spacing all match. -->
     <div class="rows" data-rows-mount aria-label="Catálogo por categoría"></div>
   </main>
 
   <script src="js/movies.js"></script>
+  <script src="js/series.js"></script>
   <script src="js/render.js"></script>
   <script src="js/interactions.js"></script>
   <script>
@@ -122,9 +127,12 @@
     // see js/detail.js for the equivalent (larger) controller used by
     // pelicula.html.
     document.addEventListener("DOMContentLoaded", () => {
-      Render.renderHeroSlider(document.querySelector("[data-hero-slider]"));
-      Render.renderAllMoviesRow(document.querySelector("[data-rows-mount]"));
-      Render.renderCategoryRows(document.querySelector("[data-rows-mount]"));
+      const mount = document.querySelector("[data-rows-mount]");
+
+      Render.renderHeroSlider(document.querySelector("[data-hero-slider]"), getFeaturedTitles());
+      Render.buildRow({ id: "todo", label: "Todo en RUBY", titles: RUBY_ALL_TITLES }, mount);
+      getAllCategories().forEach((category) => Render.buildRow(category, mount));
+
       Interactions.init();
     });
   </script>

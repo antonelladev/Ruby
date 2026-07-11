@@ -1,15 +1,16 @@
 /**
  * RUBY — Detail Page Controller
  * -----------------------------------------------------------------------
- * pelicula.html is a single template. This script reads the `id` query
- * param, looks it up in RUBY_MOVIES (js/movies.js), and fills in the DOM.
- * If the id doesn't resolve to a movie, it shows the 404 state instead
- * of a broken page.
+ * pelicula.html is a single template shared by películas and series.
+ * This script reads the `id` query param, looks it up across the
+ * combined catalog via findTitleById (js/series.js — checks RUBY_MOVIES
+ * and RUBY_SERIES), and fills in the DOM. If the id doesn't resolve to
+ * any title, it shows the 404 state instead of a broken page.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
   const id = new URLSearchParams(window.location.search).get("id");
-  const movie = id ? findMovieById(id) : null;
+  const movie = id ? findTitleById(id) : null;
 
   if (!movie) {
     showNotFound();
@@ -21,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderRelated(movie);
   Interactions.init();
   initListToggle();
-  initShare(movie);
 });
 
 function showNotFound() {
@@ -86,13 +86,14 @@ function renderRelated(movie) {
   const mount = document.querySelector("[data-related-mount]");
   if (!mount) return;
 
-  const similar = findSimilarMovies(movie, 10);
-  Render.buildRow({ id: "similares", label: "Películas similares", titles: similar }, mount);
+  const similarLabel = isSerie(movie) ? "Series similares" : "Películas similares";
+  const similar = findSimilarTitles(movie, 10);
+  Render.buildRow({ id: "similares", label: similarLabel, titles: similar }, mount);
 
-  const moreLikeThis = findMoreLikeThis(movie, similar, 10);
+  const moreLikeThis = findMoreLikeThisTitle(movie, similar, 10);
   Render.buildRow({ id: "mas-como-esta", label: "Más como esta", titles: moreLikeThis }, mount);
 
-  const recommended = findRecommended(movie, 10);
+  const recommended = findRecommendedTitles(movie, 10);
   Render.buildRow({ id: "recomendadas", label: "Recomendadas", titles: recommended }, mount);
 }
 
@@ -110,29 +111,6 @@ function initListToggle() {
       ? '<line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />'
       : '<polyline points="5 13 9 17 19 7" />';
     showToast(active ? "Se quitó de Mi Lista" : "Se agregó a Mi Lista");
-  });
-}
-
-function initShare(movie) {
-  const btn = document.querySelector("[data-share]");
-  if (!btn) return;
-
-  btn.addEventListener("click", async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: `${movie.titulo} — RUBY`, url });
-      } catch (err) {
-        // User cancelled the native share sheet — no action needed.
-      }
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      showToast("Enlace copiado");
-    } catch (err) {
-      showToast("No se pudo copiar el enlace");
-    }
   });
 }
 
