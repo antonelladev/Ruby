@@ -1,0 +1,345 @@
+/* =========================================================================
+   RUBY — Components
+   Buttons, poster cards, poster tone gradients, hover-detail card.
+   ========================================================================= */
+
+/* Buttons ------------------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-xs);
+  transition: background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--primary {
+  background: var(--color-white);
+  color: #111;
+  border: 1px solid var(--color-white);
+}
+
+.btn--primary:hover {
+  background: #d8d6d0;
+}
+
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-white);
+  border: 1px solid var(--color-border-strong);
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn--text {
+  background: transparent;
+  color: var(--color-white-dim);
+  border: 1px solid transparent;
+  padding: 12px 8px;
+}
+
+.btn--text:hover {
+  color: var(--color-white);
+}
+
+.btn--details {
+  width: 100%;
+  justify-content: center;
+  background: var(--color-red);
+  color: var(--color-white);
+  border: 1px solid var(--color-red);
+  margin-top: 14px;
+}
+
+.btn--details:hover {
+  background: var(--color-red-hi);
+  border-color: var(--color-red-hi);
+}
+
+.icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* Poster tone gradients ------------------------------------------------------ */
+
+.poster--tone-crimson,
+.hover-card__poster.poster--tone-crimson {
+  background: linear-gradient(155deg, var(--tone-crimson-a) 0%, var(--tone-crimson-b) 100%);
+}
+.poster--tone-slate,
+.hover-card__poster.poster--tone-slate {
+  background: linear-gradient(155deg, var(--tone-slate-a) 0%, var(--tone-slate-b) 100%);
+}
+.poster--tone-amber,
+.hover-card__poster.poster--tone-amber {
+  background: linear-gradient(155deg, var(--tone-amber-a) 0%, var(--tone-amber-b) 100%);
+}
+.poster--tone-moss,
+.hover-card__poster.poster--tone-moss {
+  background: linear-gradient(155deg, var(--tone-moss-a) 0%, var(--tone-moss-b) 100%);
+}
+.poster--tone-teal,
+.hover-card__poster.poster--tone-teal {
+  background: linear-gradient(155deg, var(--tone-teal-a) 0%, var(--tone-teal-b) 100%);
+}
+
+/* Poster card ---------------------------------------------------------------- */
+
+.card {
+  display: block;
+  flex: 0 0 auto;
+  width: 250px;
+  scroll-snap-align: start;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.poster {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  transition: transform var(--dur-med) var(--ease-out),
+    border-color var(--dur-med) var(--ease-standard),
+    box-shadow var(--dur-med) var(--ease-out);
+}
+
+.poster-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.poster-initial {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 74px;
+  color: rgba(243, 242, 238, 0.14);
+}
+
+.poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.poster-img.is-loaded {
+  opacity: 1;
+}
+
+.poster .spine {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+}
+
+.card-info {
+  padding: 13px 2px 0;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-white);
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card .meta-row {
+  font-size: 13.5px;
+}
+
+.card:hover .poster,
+.card:focus-visible .poster,
+.card--active .poster {
+  transform: scale(1.045);
+  border-color: var(--color-border-strong);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7);
+  z-index: 5;
+}
+
+/* Floating hover-detail card -------------------------------------------------- */
+
+.hover-card {
+  position: fixed;
+  width: 270px;
+  /* Explicitly above every row/card stacking context (.rows sits at 1,
+     row-nav at 2, navbar at 100) so it can never end up behind a poster,
+     while staying below the toast (300) and skip-link (1000). */
+  z-index: 260;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.94) translateY(6px);
+  transform-origin: var(--origin-x, 50%) 100%;
+  transition: opacity var(--dur-med) var(--ease-out),
+    transform var(--dur-med) var(--ease-out), visibility var(--dur-med);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hover-card--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.hover-card__poster {
+  position: relative;
+  aspect-ratio: 16 / 8;
+  display: grid;
+  place-items: center;
+}
+
+.hover-card__poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.hover-card__poster-img.is-loaded {
+  opacity: 1;
+}
+
+.hover-card__initial {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 37px;
+  color: rgba(243, 242, 238, 0.16);
+}
+
+.hover-card__spine {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--color-white-dim);
+  background: rgba(10, 10, 10, 0.72);
+  border: 1px solid var(--color-border-strong);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+.hover-card__body {
+  padding: 15px;
+}
+
+.hover-card__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18.5px;
+  color: var(--color-white);
+  margin-bottom: 7px;
+}
+
+.hover-card__meta {
+  margin-bottom: 10px;
+}
+
+.hover-card__genres {
+  margin-bottom: 11px;
+}
+
+.hover-card__desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-white-dim);
+}
+
+.hover-card .btn--details {
+  padding: 11px 20px;
+  font-size: 15px;
+  margin-top: 12px;
+}
+
+.hover-card__list-toggle {
+  width: 100%;
+  justify-content: center;
+  padding: 11px 20px;
+  font-size: 14.5px;
+  margin-top: 12px;
+}
+
+/* Same active-state treatment as .btn[aria-pressed="true"] in detail.css,
+   duplicated here so it also applies on pages that don't load detail.css
+   (index.html, peliculas.html, series.html) — needed now that the Mi Lista
+   toggle lives in the hover card on every catalog page. */
+.btn[aria-pressed="true"] {
+  background: rgba(193, 18, 31, 0.16);
+  border-color: var(--color-red);
+  color: var(--color-white);
+}
+
+/* Catalog page header ------------------------------------------------------
+   Used by pages that list titles without a hero slider above them
+   (series.html, mi-lista.html) — a plain title + intro line that clears
+   the fixed navbar on its own. */
+
+.catalog-header {
+  padding: calc(var(--nav-height) + 56px) var(--gutter) 8px;
+  max-width: 640px;
+}
+
+.catalog-header__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white-faint);
+  margin-bottom: 12px;
+}
+
+.catalog-header__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 40px;
+  color: var(--color-white);
+  margin-bottom: 10px;
+}
+
+.catalog-header__text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--color-white-dim);
+  max-width: 56ch;
+}
+
+/* .rows normally carries a negative top margin to blend into the hero
+   slider above it (see styles.css) — pages with a plain header instead
+   need that reset so rows don't get pulled up under the title. */
+.rows--flat {
+  margin-top: 0;
+}
