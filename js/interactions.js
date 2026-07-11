@@ -19,6 +19,7 @@ const Interactions = (() => {
   let openTimer = null;
   let closeTimer = null;
   let activeCardEl = null;
+  let hoverCardMovie = null;
 
   /* ---------------------------------------------------------------- */
   /* Navbar                                                            */
@@ -265,14 +266,79 @@ const Interactions = (() => {
         <div class="hover-card__meta"></div>
         <div class="hover-card__genres"></div>
         <p class="hover-card__desc"></p>
+        <button
+          type="button"
+          class="btn btn--ghost hover-card__list-toggle"
+          data-hover-list-toggle
+          aria-pressed="false"
+        >
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" data-hover-list-icon>
+            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          <span data-hover-list-label>Agregar a Mi Lista</span>
+        </button>
         <a href="#" class="btn btn--details" data-hover-details>Ver detalles</a>
       </div>
     `;
     document.body.appendChild(el);
+
+    el.querySelector("[data-hover-list-toggle]").addEventListener("click", (e) => {
+      e.preventDefault();
+      handleHoverListToggle();
+    });
+
     return el;
   }
 
+  /**
+   * Toggles the movie currently shown in the hover card in/out of
+   * RubyList (js/lista.js — localStorage), then updates the button to
+   * reflect the new state immediately. On mi-lista.html specifically,
+   * removing a title also drops its card from the row right away
+   * instead of waiting for a reload, falling back to the empty state
+   * if that was the last one.
+   */
+  function handleHoverListToggle() {
+    if (!hoverCardMovie || typeof RubyList === "undefined") return;
+
+    const active = RubyList.toggle(hoverCardMovie.id);
+    syncHoverListButton(hoverCardMovie);
+
+    const emptyState = document.querySelector("[data-list-empty]");
+    if (emptyState && !active && activeCardEl) {
+      const cardToRemove = activeCardEl;
+      const row = cardToRemove.closest(".row");
+      closeHoverCardNow();
+      cardToRemove.remove();
+
+      const mount = document.querySelector("[data-rows-mount]");
+      if (row && !row.querySelector(".card")) row.remove();
+      if (mount && !mount.querySelector(".card")) {
+        mount.innerHTML = "";
+        emptyState.hidden = false;
+      }
+    }
+  }
+
+  /** Syncs the hover card's Mi Lista button (icon + label + aria-pressed) to RubyList. */
+  function syncHoverListButton(movie) {
+    const btn = hoverCard.querySelector("[data-hover-list-toggle]");
+    if (!btn || typeof RubyList === "undefined") return;
+
+    const icon = btn.querySelector("[data-hover-list-icon]");
+    const label = btn.querySelector("[data-hover-list-label]");
+    const active = RubyList.has(movie.id);
+
+    btn.setAttribute("aria-pressed", String(active));
+    label.textContent = active ? "En tu lista" : "Agregar a Mi Lista";
+    icon.innerHTML = active
+      ? '<polyline points="5 13 9 17 19 7" />'
+      : '<line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />';
+  }
+
   function populateHoverCard(movie) {
+    hoverCardMovie = movie;
+
     hoverCard.querySelector(".hover-card__initial").textContent =
       movie.titulo.charAt(0);
     const posterEl = hoverCard.querySelector(".hover-card__poster");
@@ -301,6 +367,8 @@ const Interactions = (() => {
 
     hoverCard.querySelector("[data-hover-details]").href =
       `pelicula.html?id=${movie.id}`;
+
+    syncHoverListButton(movie);
   }
 
   function positionHoverCard(cardEl) {
@@ -312,7 +380,7 @@ const Interactions = (() => {
     left = Math.max(margin, Math.min(left, window.innerWidth - cardWidth - margin));
 
     let top = rect.top - 30; // rise slightly above the poster
-    const estHeight = 310;
+    const estHeight = 360; // hover-card now has 2 stacked action buttons
     if (top + estHeight > window.innerHeight - margin) {
       top = Math.max(margin, window.innerHeight - estHeight - margin);
     }

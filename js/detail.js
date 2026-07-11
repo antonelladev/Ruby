@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderDetail(movie);
   renderRelated(movie);
   Interactions.init();
-  initListToggle();
+  initListToggle(movie);
 });
 
 function showNotFound() {
@@ -97,20 +97,28 @@ function renderRelated(movie) {
   Render.buildRow({ id: "recomendadas", label: "Recomendadas", titles: recommended }, mount);
 }
 
-function initListToggle() {
+function initListToggle(movie) {
   const btn = document.querySelector("[data-list-toggle]");
   if (!btn) return;
   const label = btn.querySelector("[data-list-label]");
   const icon = btn.querySelector("[data-list-icon]");
 
-  btn.addEventListener("click", () => {
-    const active = btn.getAttribute("aria-pressed") === "true";
-    btn.setAttribute("aria-pressed", String(!active));
-    label.textContent = active ? "Agregar a Mi Lista" : "En tu lista";
+  const syncState = (active) => {
+    btn.setAttribute("aria-pressed", String(active));
+    label.textContent = active ? "En tu lista" : "Agregar a Mi Lista";
     icon.innerHTML = active
-      ? '<line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />'
-      : '<polyline points="5 13 9 17 19 7" />';
-    showToast(active ? "Se quitó de Mi Lista" : "Se agregó a Mi Lista");
+      ? '<polyline points="5 13 9 17 19 7" />'
+      : '<line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />';
+  };
+
+  // Reflect whatever was already saved for this title as soon as the
+  // page loads, instead of always starting from "Agregar a Mi Lista".
+  syncState(RubyList.has(movie.id));
+
+  btn.addEventListener("click", () => {
+    const active = RubyList.toggle(movie.id);
+    syncState(active);
+    showToast(active ? "Se agregó a Mi Lista" : "Se quitó de Mi Lista");
   });
 }
 

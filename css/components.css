@@ -285,6 +285,24 @@
   margin-top: 12px;
 }
 
+.hover-card__list-toggle {
+  width: 100%;
+  justify-content: center;
+  padding: 11px 20px;
+  font-size: 14.5px;
+  margin-top: 12px;
+}
+
+/* Same active-state treatment as .btn[aria-pressed="true"] in detail.css,
+   duplicated here so it also applies on pages that don't load detail.css
+   (index.html, peliculas.html, series.html) — needed now that the Mi Lista
+   toggle lives in the hover card on every catalog page. */
+.btn[aria-pressed="true"] {
+  background: rgba(193, 18, 31, 0.16);
+  border-color: var(--color-red);
+  color: var(--color-white);
+}
+
 /* Catalog page header ------------------------------------------------------
    Used by pages that list titles without a hero slider above them
    (series.html, mi-lista.html) — a plain title + intro line that clears
