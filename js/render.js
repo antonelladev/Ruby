@@ -369,10 +369,24 @@ const Render = (() => {
     buildRow({ id: "todas", label: "Todas las películas", titles: RUBY_MOVIES }, mount);
   }
 
+  /**
+   * Builds the "Todas las series" row directly from RUBY_SERIES (js/series.js)
+   * — the entire series catalog, in catalog order. Mirrors
+   * renderAllMoviesRow exactly, through the same buildRow/createCard used
+   * by every other row, so it never diverges in markup, sizing or
+   * spacing. Add a series to js/series.js and it appears here
+   * automatically, same as every category row.
+   */
+  function renderAllSeriesRow(mount) {
+    if (!mount) return;
+    buildRow({ id: "todas-series", label: "Todas las series", titles: RUBY_SERIES }, mount);
+  }
+
   return {
     renderHeroSlider,
     renderCategoryRows,
     renderAllMoviesRow,
+    renderAllSeriesRow,
     buildRow,
     createCard,
     posterVisual,
