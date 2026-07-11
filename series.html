@@ -108,11 +108,10 @@
     </section>
 
     <!-- ==================== CATALOG ROWS ==================== -->
-    <!-- One row per distinct `categoria` in js/series.js, built with the
-         exact same Render.buildRow used for películas, followed by a
-         final "Todas las series" row (Render.renderAllSeriesRow) with
-         the entire catalog — mirrors peliculas.html's "Todas las
-         películas" row exactly, no separate rendering logic lives here. -->
+    <!-- "Todas las series" (Render.renderAllSeriesRow) with the entire
+         catalog goes first, followed by one row per distinct `categoria`
+         in js/series.js, built with the exact same Render.buildRow used
+         for películas — no separate rendering logic lives here. -->
     <div class="rows rows--flat" data-rows-mount aria-label="Catálogo de series por género"></div>
   </main>
 
@@ -123,9 +122,10 @@
   <script src="js/lista.js"></script>
   <script src="js/search.js"></script>
   <script>
-    // Series bootstrap: builds one row per series category via the same
-    // Render.buildRow used everywhere else — this page only supplies
-    // getSeriesCategories() as the data source, no new render code.
+    // Series bootstrap: "Todas las series" first (Render.renderAllSeriesRow),
+    // then one row per series category via the same Render.buildRow used
+    // everywhere else — this page only supplies getSeriesCategories() as
+    // the data source, no new render code.
     document.addEventListener("DOMContentLoaded", () => {
     const hero = document.querySelector("[data-hero-slider]");
     const mount = document.querySelector("[data-rows-mount]");
@@ -135,11 +135,11 @@
         RUBY_SERIES.filter(s => s.featured)
     );
 
+    Render.renderAllSeriesRow(mount);
+
     getSeriesCategories().forEach(category =>
         Render.buildRow(category, mount)
     );
-
-    Render.renderAllSeriesRow(mount);
 
     Interactions.init();
     });

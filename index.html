@@ -110,11 +110,14 @@
     <section class="hero-slider" data-hero-slider aria-label="Títulos destacados"></section>
 
     <!-- ==================== CATALOG ROWS ==================== -->
-    <!-- Built entirely by Render.buildRow() — one row per distinct
-         `categoria` found across the combined catalog (getAllCategories(),
-         js/series.js), so each row can mix películas and series. Uses the
-         exact same Render.buildRow/createCard as Películas and Series, so
-         card sizes, navbar and spacing all match. -->
+    <!-- "Todo en RUBY", then "Todas las películas" / "Todas las series"
+         (Render.renderAllMoviesRow / renderAllSeriesRow — the same
+         functions used on peliculas.html and series.html), followed by
+         one row per distinct `categoria` found across the combined
+         catalog (getAllCategories(), js/series.js), so each category row
+         can mix películas and series. Uses the exact same
+         Render.buildRow/createCard as Películas and Series, so card
+         sizes, navbar and spacing all match. -->
     <div class="rows" data-rows-mount aria-label="Catálogo por categoría"></div>
   </main>
 
@@ -134,6 +137,8 @@
 
       Render.renderHeroSlider(document.querySelector("[data-hero-slider]"), getFeaturedTitles());
       Render.buildRow({ id: "todo", label: "Todo en RUBY", titles: RUBY_ALL_TITLES }, mount);
+      Render.renderAllMoviesRow(mount);
+      Render.renderAllSeriesRow(mount);
       getAllCategories().forEach((category) => Render.buildRow(category, mount));
 
       Interactions.init();
