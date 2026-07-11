@@ -246,9 +246,10 @@ const Render = (() => {
    * is wired separately by Interactions.initHeroSlider — this function
    * only builds markup.
    */
-  function renderHeroSlider(mount) {
+    function renderHeroSlider(mount, items = getFeaturedMovies()) {
     if (!mount) return;
-    const movies = getFeaturedMovies();
+
+    const movies = items;
 
     const slidesWrap = document.createElement("div");
     slidesWrap.className = "hero-slides";

@@ -100,14 +100,11 @@
     </div>
   </header>
 
-  <main id="main-content">
-    <div class="catalog-header">
-      <p class="catalog-header__eyebrow">Catálogo</p>
-      <h1 class="catalog-header__title">Series</h1>
-      <p class="catalog-header__text">
-        Todas las series de RUBY, organizadas automáticamente por género.
-      </p>
-    </div>
+    <section
+      class="hero-slider"
+      data-hero-slider
+      aria-label="Series destacadas">
+    </section>
 
     <!-- ==================== CATALOG ROWS ==================== -->
     <!-- One row per distinct `categoria` in js/series.js, built with the
@@ -125,9 +122,19 @@
     // Render.buildRow used everywhere else — this page only supplies
     // getSeriesCategories() as the data source, no new render code.
     document.addEventListener("DOMContentLoaded", () => {
-      const mount = document.querySelector("[data-rows-mount]");
-      getSeriesCategories().forEach((category) => Render.buildRow(category, mount));
-      Interactions.init();
+    const hero = document.querySelector("[data-hero-slider]");
+    const mount = document.querySelector("[data-rows-mount]");
+
+    Render.renderHeroSlider(
+        hero,
+        RUBY_SERIES.filter(s => s.featured)
+    );
+
+    getSeriesCategories().forEach(category =>
+        Render.buildRow(category, mount)
+    );
+
+    Interactions.init();
     });
   </script>
 </body>
