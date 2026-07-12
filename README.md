@@ -8,10 +8,14 @@ RUBY is a frontend-focused project designed to showcase modern UI design, scalab
 
 ## Preview
 
-<img width="1710" height="934" alt="screenshot4" src="https://github.com/user-attachments/assets/ca675605-08af-482d-9fac-96ba4af2ca9f" />
-<img width="1710" height="939" alt="screenshot3" src="https://github.com/user-attachments/assets/6158fb80-b1f2-4754-9260-0088d65fef39" />
-<img width="1710" height="940" alt="screenshot2" src="https://github.com/user-attachments/assets/fa9d5ac4-7f64-4b3e-afb9-7cda92cdab52" />
+
 <img width="1710" height="938" alt="screenshot1" src="https://github.com/user-attachments/assets/3be5b8d1-eb1c-4319-814c-0e5b8c5aa4fe" />
+
+<img width="1710" height="940" alt="screenshot2" src="https://github.com/user-attachments/assets/fa9d5ac4-7f64-4b3e-afb9-7cda92cdab52" />
+
+<img width="1710" height="939" alt="screenshot3" src="https://github.com/user-attachments/assets/6158fb80-b1f2-4754-9260-0088d65fef39" />
+
+<img width="1710" height="934" alt="screenshot4" src="https://github.com/user-attachments/assets/ca675605-08af-482d-9fac-96ba4af2ca9f" />
 
 
 ---
